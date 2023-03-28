@@ -9,6 +9,11 @@ import (
 	"github.com/karuppiah7890/go-togai"
 )
 
+// TODO: Delete test data that we create after the tests are done.
+// Deleting test data would use the APIs we test as part of the
+// library tests, so, let's hope that the library works and hence
+// the cleanup done with the library also works when doing the testing
+
 func TestCustomers(t *testing.T) {
 	apiBaseUrl := os.Getenv("API_BASE_URL")
 	apiToken := os.Getenv("API_TOKEN")
