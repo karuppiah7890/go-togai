@@ -1,10 +1,15 @@
 package togai
 
-import "net/http"
+import (
+	"fmt"
+	"net/http"
+	"net/url"
+)
 
 type TogaiClient struct {
-	ApiBaseUrl string
-	ApiToken   string
+	// TODO: Should these fields be exported? Maybe not, all fields can be internal
+	apiBaseUrl *url.URL
+	apiToken   string
 	httpClient *http.Client
 }
 
@@ -15,10 +20,15 @@ const (
 	AUTHORIZATION_HTTP_HEADER = "authorization"
 )
 
-func NewTogaiClient(ApiBaseUrl string, ApiToken string) *TogaiClient {
-	return &TogaiClient{
-		ApiBaseUrl: ApiBaseUrl,
-		ApiToken:   ApiToken,
-		httpClient: http.DefaultClient,
+func NewTogaiClient(apiBaseUrl string, apiToken string) (*TogaiClient, error) {
+	parsedUrl, err := url.Parse(apiBaseUrl)
+	if err != nil {
+		return nil, fmt.Errorf("error occurred while parsing api base url %s: %v", apiBaseUrl, err)
 	}
+
+	return &TogaiClient{
+		apiBaseUrl: parsedUrl,
+		apiToken:   apiToken,
+		httpClient: http.DefaultClient,
+	}, nil
 }

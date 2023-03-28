@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"io"
 	"net/http"
-	"net/url"
 )
 
 // TODO: Document all data types and fields.
@@ -119,24 +118,21 @@ type AccountAlias struct {
 
 // CreateCustomer creates the given customer
 func (c *TogaiClient) CreateCustomer(customer Customer) (*CreateCustomerOutput, error) {
-	customersEndpoint, err := url.JoinPath(c.ApiBaseUrl, "customers")
-	if err != nil {
-		return nil, fmt.Errorf("error forming customers API endpoint: %v", err)
-	}
+	customersEndpoint := c.apiBaseUrl.JoinPath("customers")
 
 	createCustomerJsonPayload, err := json.Marshal(customer)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing customer object to JSON string: %v", err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, customersEndpoint, bytes.NewReader(createCustomerJsonPayload))
+	req, err := http.NewRequest(http.MethodPost, customersEndpoint.String(), bytes.NewReader(createCustomerJsonPayload))
 	if err != nil {
 		return nil, fmt.Errorf("error occurred while forming request: %v", err)
 	}
 
 	req.Header.Add(ACCEPT_HTTP_HEADER, JSON_TYPE)
 	req.Header.Add(CONTENT_TYPE_HTTP_HEADER, JSON_TYPE)
-	req.Header.Add(AUTHORIZATION_HTTP_HEADER, fmt.Sprintf("Bearer %s", c.ApiToken))
+	req.Header.Add(AUTHORIZATION_HTTP_HEADER, fmt.Sprintf("Bearer %s", c.apiToken))
 
 	res, err := c.httpClient.Do(req)
 	if err != nil {

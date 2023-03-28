@@ -17,7 +17,10 @@ import (
 func TestCustomers(t *testing.T) {
 	apiBaseUrl := os.Getenv("API_BASE_URL")
 	apiToken := os.Getenv("API_TOKEN")
-	c := togai.NewTogaiClient(apiBaseUrl, apiToken)
+	c, err := togai.NewTogaiClient(apiBaseUrl, apiToken)
+	if err != nil {
+		t.Fatalf("expected no error while creating togai client but an error occurred: %v", err)
+	}
 
 	t.Run("create customer", func(t *testing.T) {
 		randomNumber := rand.Int()
@@ -55,7 +58,22 @@ func TestCustomers(t *testing.T) {
 		// some expected values like status as ACTIVE for account and account alias
 		_, err := c.CreateCustomer(customer)
 		if err != nil {
-			t.Fatalf("expected no error but an error occurred: %v", err)
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
 		}
 	})
+
+	t.Run("list customers", func(t *testing.T) {
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		numberOfCustomers := 2
+
+		customers, err := c.ListCustomers("", numberOfCustomers)
+		if err != nil {
+			t.Fatalf("expected no error while listing customers but an error occurred: %v", err)
+		}
+		if len(customers.Data) != numberOfCustomers {
+			t.Fatalf("expected %d customers while listing customers but there's %d customers", numberOfCustomers, len(customers.Data))
+		}
+	})
+
 }
