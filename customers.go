@@ -23,7 +23,7 @@ import (
 //
 // Learn more from [Customer Management]
 //
-// [Customer Management]: https://docs.togai.com/docs/customer-management
+// [Customer Management]: https://docs.togai.com/docs/customers
 type Customer struct {
 	// Customer identifier
 	Id string `json:"id"`
