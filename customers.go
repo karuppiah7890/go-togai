@@ -117,9 +117,7 @@ type AccountAlias struct {
 	Status string `json:"status"`
 }
 
-// TODO: Move URL and Token to togai client struct.
-// Convert this function into a method on togai client struct and use url and token from there.
-// Use http client from the togai client struct
+// CreateCustomer creates the given customer
 func (c *TogaiClient) CreateCustomer(customer Customer) (*CreateCustomerOutput, error) {
 	customersEndpoint, err := url.JoinPath(c.ApiBaseUrl, "customers")
 	if err != nil {
