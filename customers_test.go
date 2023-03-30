@@ -77,7 +77,7 @@ func TestCustomers(t *testing.T) {
 
 		updatedName := customer.Name + " Updated"
 		updatedPrimaryEmail := "updated-" + customer.PrimaryEmail
-		updatedBillingAddress := "updated-" + customer.PrimaryEmail
+		updatedBillingAddress := "Updated " + customer.BillingAddress
 
 		expectedUpdatedCustomer.Name = updatedName
 		expectedUpdatedCustomer.PrimaryEmail = updatedPrimaryEmail
