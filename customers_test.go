@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	"github.com/karuppiah7890/go-togai"
+	"github.com/stretchr/testify/assert"
 )
 
 // TODO: Delete test data that we create after the tests are done.
@@ -24,36 +25,7 @@ func TestCustomers(t *testing.T) {
 
 	t.Run("create customer", func(t *testing.T) {
 		randomNumber := rand.Int()
-		customer := togai.Customer{
-			Id:           fmt.Sprintf("test-customer-%d", randomNumber),
-			Name:         fmt.Sprintf("Test Customer %d", randomNumber),
-			PrimaryEmail: "karuppiah+test-customer@togai.com",
-			Settings: []togai.Setting{
-				{
-					Id:        fmt.Sprintf("dummy-customer-setting-%d", randomNumber),
-					Name:      fmt.Sprintf("Dummy Customer Setting %d", randomNumber),
-					Namespace: togai.UserNamespace,
-					Value:     "10",
-					DataType:  togai.NumericSettingDataType,
-				},
-			},
-			BillingAddress: "Test Billing Address",
-			Account: togai.Account{
-				Id:              fmt.Sprintf("test-account-%d", randomNumber),
-				Name:            fmt.Sprintf("Test Account %d", randomNumber),
-				InvoiceCurrency: "USD",
-				Aliases:         []string{fmt.Sprintf("test-account-%d", randomNumber)},
-				Settings: []togai.Setting{
-					{
-						Id:        fmt.Sprintf("dummy-account-setting-%d", randomNumber),
-						Name:      fmt.Sprintf("Dummy Account Setting %d", randomNumber),
-						Namespace: togai.UserNamespace,
-						Value:     fmt.Sprintf("something %d", randomNumber),
-						DataType:  togai.StringSettingDataType,
-					},
-				},
-			},
-		}
+		customer := dummyCustomerWithAccount(randomNumber)
 		// TODO: Check if the output response fields and input request fields match, and that response also has
 		// some expected values like status as ACTIVE for account and account alias
 		_, err := c.CreateCustomer(customer)
@@ -76,4 +48,73 @@ func TestCustomers(t *testing.T) {
 		}
 	})
 
+	t.Run("get a customer", func(t *testing.T) {
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		randomNumber := rand.Int()
+		customer := dummyCustomerWithAccount(randomNumber)
+		_, err := c.CreateCustomer(customer)
+		if err != nil {
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
+		}
+
+		expectedCustomer := dummyCustomer(randomNumber)
+
+		actualCustomer, err := c.GetCustomer(customer.Id)
+		if err != nil {
+			t.Fatalf("expected no error while listing customers but an error occurred: %v", err)
+		}
+		assertCustomer(t, expectedCustomer, *actualCustomer)
+	})
+
+}
+
+func dummyCustomerWithAccount(randomNumber int) togai.CustomerWithAccount {
+	customer := dummyCustomer(randomNumber)
+	return togai.CustomerWithAccount{
+		Id:           customer.Id,
+		Name:         customer.Name,
+		PrimaryEmail: customer.PrimaryEmail,
+		Settings: []togai.Setting{
+			{
+				Id:        fmt.Sprintf("dummy-customer-setting-%d", randomNumber),
+				Name:      fmt.Sprintf("Dummy Customer Setting %d", randomNumber),
+				Namespace: togai.UserNamespace,
+				Value:     "10",
+				DataType:  togai.NumericSettingDataType,
+			},
+		},
+		BillingAddress: customer.BillingAddress,
+		Account: togai.Account{
+			Id:              fmt.Sprintf("test-account-%d", randomNumber),
+			Name:            fmt.Sprintf("Test Account %d", randomNumber),
+			InvoiceCurrency: "USD",
+			Aliases:         []string{fmt.Sprintf("test-account-%d", randomNumber)},
+			Settings: []togai.Setting{
+				{
+					Id:        fmt.Sprintf("dummy-account-setting-%d", randomNumber),
+					Name:      fmt.Sprintf("Dummy Account Setting %d", randomNumber),
+					Namespace: togai.UserNamespace,
+					Value:     fmt.Sprintf("something %d", randomNumber),
+					DataType:  togai.StringSettingDataType,
+				},
+			},
+		},
+	}
+}
+
+func dummyCustomer(randomNumber int) togai.Customer {
+	return togai.Customer{
+		Id:             fmt.Sprintf("test-customer-%d", randomNumber),
+		Name:           fmt.Sprintf("Test Customer %d", randomNumber),
+		PrimaryEmail:   fmt.Sprintf("test-customer-%d@togai.com", randomNumber),
+		BillingAddress: "Test Billing Address",
+	}
+}
+
+func assertCustomer(t *testing.T, expectedCustomer togai.Customer, actualCustomer togai.Customer) {
+	assert.Equal(t, expectedCustomer.Id, actualCustomer.Id, "customer IDs should be equal")
+	assert.Equal(t, expectedCustomer.Name, actualCustomer.Name, "customer names should be equal")
+	assert.Equal(t, expectedCustomer.PrimaryEmail, actualCustomer.PrimaryEmail, "customer primary emails should be equal")
+	assert.Equal(t, expectedCustomer.BillingAddress, actualCustomer.BillingAddress, "customer billing addresses should be equal")
 }

@@ -23,7 +23,7 @@ import (
 // Learn more from [Customer Management]
 //
 // [Customer Management]: https://docs.togai.com/docs/customers
-type Customer struct {
+type CustomerWithAccount struct {
 	// Customer identifier
 	Id string `json:"id"`
 	// Name of the Customer
@@ -116,8 +116,10 @@ type AccountAlias struct {
 	Status string `json:"status"`
 }
 
+// TODO: Should we get a pointer to customer struct as input parameter? Instead of customer itself
+
 // CreateCustomer creates the given customer
-func (c *TogaiClient) CreateCustomer(customer Customer) (*CreateCustomerOutput, error) {
+func (c *TogaiClient) CreateCustomer(customer CustomerWithAccount) (*CreateCustomerOutput, error) {
 	customersEndpoint := c.apiBaseUrl.JoinPath("customers")
 
 	createCustomerJsonPayload, err := json.Marshal(customer)

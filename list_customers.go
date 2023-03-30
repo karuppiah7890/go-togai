@@ -11,11 +11,11 @@ import (
 )
 
 type ListCustomersOutput struct {
-	Data      []CustomerInList `json:"data"`
-	NextToken string           `json:"nextToken"`
+	Data      []Customer `json:"data"`
+	NextToken string     `json:"nextToken"`
 }
 
-type CustomerInList struct {
+type Customer struct {
 	// Customer identifier
 	Id string `json:"id"`
 	// Name of the Customer
@@ -67,7 +67,7 @@ func (c *TogaiClient) ListCustomers(nextToken string, pageSize int) (*ListCustom
 
 	if res.StatusCode != 200 {
 		body, _ := io.ReadAll(res.Body)
-		return nil, fmt.Errorf("expected 200 created response but got: \nstatus code: %v, status: %v, body: %v", res.StatusCode, res.Status, string(body))
+		return nil, fmt.Errorf("expected 200 OK response but got: \nstatus code: %v, status: %v, body: %v", res.StatusCode, res.Status, string(body))
 	}
 
 	body, err := io.ReadAll(res.Body)
