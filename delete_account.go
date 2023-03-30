@@ -7,10 +7,10 @@ import (
 	"net/http"
 )
 
-func (c *TogaiClient) DeleteCustomer(customerId string) error {
-	deleteCustomerEndpoint := c.apiBaseUrl.JoinPath("customers", customerId)
+func (c *TogaiClient) DeleteAccount(customerId string, accountId string) error {
+	deleteAccountEndpoint := c.apiBaseUrl.JoinPath("customers", customerId, "accounts", accountId)
 
-	req, err := http.NewRequest(http.MethodDelete, deleteCustomerEndpoint.String(), nil)
+	req, err := http.NewRequest(http.MethodDelete, deleteAccountEndpoint.String(), nil)
 	if err != nil {
 		return fmt.Errorf("error occurred while forming request: %v", err)
 	}
@@ -35,15 +35,15 @@ func (c *TogaiClient) DeleteCustomer(customerId string) error {
 		return fmt.Errorf("error occurred while reading response body: %v", err)
 	}
 
-	var deleteCustomerOutput Status
+	var deleteAccountOutput Status
 
-	err = json.Unmarshal(body, &deleteCustomerOutput)
+	err = json.Unmarshal(body, &deleteAccountOutput)
 	if err != nil {
 		return fmt.Errorf("error occurred while parsing json response body: %v\n\njson body: %v", err, string(body))
 	}
 
-	if !deleteCustomerOutput.Success {
-		return fmt.Errorf("deletion of the customer did not succeed")
+	if !deleteAccountOutput.Success {
+		return fmt.Errorf("deletion of the account did not succeed")
 	}
 
 	return nil

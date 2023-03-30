@@ -108,6 +108,11 @@ func TestCustomers(t *testing.T) {
 			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
 		}
 
+		err = c.DeleteAccount(customer.Id, customer.Account.Id)
+		if err != nil {
+			t.Fatalf("expected no error while deleting account but an error occurred: %v", err)
+		}
+
 		err = c.DeleteCustomer(customer.Id)
 		if err != nil {
 			t.Fatalf("expected no error while deleting customer but an error occurred: %v", err)
