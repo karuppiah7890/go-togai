@@ -99,6 +99,20 @@ func TestCustomers(t *testing.T) {
 		assert.Equal(t, expectedUpdatedCustomer.PrimaryEmail, updatedCustomer.PrimaryEmail, "customer primary emails should be equal")
 		assert.Equal(t, expectedUpdatedCustomer.BillingAddress, updatedCustomer.BillingAddress, "customer billing addresses should be equal")
 	})
+
+	t.Run("delete a customer", func(t *testing.T) {
+		randomNumber := rand.Int()
+		customer := dummyCustomerWithAccount(randomNumber)
+		_, err := c.CreateCustomer(customer)
+		if err != nil {
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
+		}
+
+		err = c.DeleteCustomer(customer.Id)
+		if err != nil {
+			t.Fatalf("expected no error while deleting customer but an error occurred: %v", err)
+		}
+	})
 }
 
 func dummyCustomerWithAccount(randomNumber int) togai.CustomerWithAccount {
