@@ -24,6 +24,8 @@ type Customer struct {
 	PrimaryEmail string `json:"primaryEmail"`
 	// Billing address of the customer
 	BillingAddress string `json:"billingAddress"`
+	// Status of the customer
+	Status string `json:"status"`
 	// Time at which the customer was created
 	CreatedAt time.Time `json:"createdAt"`
 	// Time at which the customer was last updated

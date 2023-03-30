@@ -120,14 +120,14 @@ type AccountAlias struct {
 
 // CreateCustomer creates the given customer
 func (c *TogaiClient) CreateCustomer(customer CustomerWithAccount) (*CreateCustomerOutput, error) {
-	customersEndpoint := c.apiBaseUrl.JoinPath("customers")
+	createCustomerEndpoint := c.apiBaseUrl.JoinPath("customers")
 
 	createCustomerJsonPayload, err := json.Marshal(customer)
 	if err != nil {
 		return nil, fmt.Errorf("error serializing customer object to JSON string: %v", err)
 	}
 
-	req, err := http.NewRequest(http.MethodPost, customersEndpoint.String(), bytes.NewReader(createCustomerJsonPayload))
+	req, err := http.NewRequest(http.MethodPost, createCustomerEndpoint.String(), bytes.NewReader(createCustomerJsonPayload))
 	if err != nil {
 		return nil, fmt.Errorf("error occurred while forming request: %v", err)
 	}

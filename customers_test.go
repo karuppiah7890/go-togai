@@ -49,8 +49,6 @@ func TestCustomers(t *testing.T) {
 	})
 
 	t.Run("get a customer", func(t *testing.T) {
-		// TODO: Check if the output response fields and input request fields match, and that response also has
-		// some expected values like status as ACTIVE for account and account alias
 		randomNumber := rand.Int()
 		customer := dummyCustomerWithAccount(randomNumber)
 		_, err := c.CreateCustomer(customer)
@@ -62,11 +60,45 @@ func TestCustomers(t *testing.T) {
 
 		actualCustomer, err := c.GetCustomer(customer.Id)
 		if err != nil {
-			t.Fatalf("expected no error while listing customers but an error occurred: %v", err)
+			t.Fatalf("expected no error while getting a customer but an error occurred: %v", err)
 		}
 		assertCustomer(t, expectedCustomer, *actualCustomer)
 	})
 
+	t.Run("update a customer", func(t *testing.T) {
+		randomNumber := rand.Int()
+		customer := dummyCustomerWithAccount(randomNumber)
+		_, err := c.CreateCustomer(customer)
+		if err != nil {
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
+		}
+
+		expectedUpdatedCustomer := dummyCustomer(randomNumber)
+
+		updatedName := customer.Name + " Updated"
+		updatedPrimaryEmail := "updated-" + customer.PrimaryEmail
+		updatedBillingAddress := "updated-" + customer.PrimaryEmail
+
+		expectedUpdatedCustomer.Name = updatedName
+		expectedUpdatedCustomer.PrimaryEmail = updatedPrimaryEmail
+		expectedUpdatedCustomer.BillingAddress = updatedBillingAddress
+
+		updateCustomerInput := togai.UpdateCustomerInput{
+			Id:             customer.Id,
+			Name:           &updatedName,
+			PrimaryEmail:   &updatedPrimaryEmail,
+			BillingAddress: &updatedBillingAddress,
+		}
+
+		updatedCustomer, err := c.UpdateCustomer(updateCustomerInput)
+		if err != nil {
+			t.Fatalf("expected no error while updating customer but an error occurred: %v", err)
+		}
+		assert.Equal(t, expectedUpdatedCustomer.Id, updatedCustomer.Id, "customer IDs should be equal")
+		assert.Equal(t, expectedUpdatedCustomer.Name, updatedCustomer.Name, "customer names should be equal")
+		assert.Equal(t, expectedUpdatedCustomer.PrimaryEmail, updatedCustomer.PrimaryEmail, "customer primary emails should be equal")
+		assert.Equal(t, expectedUpdatedCustomer.BillingAddress, updatedCustomer.BillingAddress, "customer billing addresses should be equal")
+	})
 }
 
 func dummyCustomerWithAccount(randomNumber int) togai.CustomerWithAccount {
