@@ -62,22 +62,6 @@ const (
 	JsonLogicSettingDataType SettingDataType = "JSON_LOGIC"
 )
 
-type Account struct {
-	// Identifier of the account
-	Id string `json:"id"`
-	// Name of the Account
-	Name string `json:"name"`
-	// Use [ISO 4217] currency code in which the account must be invoiced.
-	// For example: AED is the currency code for United Arab Emirates dirham.
-	//
-	// [ISO 4217]: https://en.wikipedia.org/wiki/ISO_4217
-	InvoiceCurrency string `json:"invoiceCurrency"`
-	// Aliases are tags that are associated with an account. Multiple aliases are allowed for a single account.
-	Aliases []string `json:"aliases"`
-	// Account Settings
-	Settings []Setting `json:"settings"`
-}
-
 type CreateCustomerOutput struct {
 	// Customer identifier
 	Id string `json:"id"`
@@ -91,29 +75,6 @@ type CreateCustomerOutput struct {
 	Settings []Setting `json:"settings"`
 	// Payload to create [Account]
 	Account CreateAccountOutput `json:"account"`
-}
-
-type CreateAccountOutput struct {
-	// Identifier of the account
-	Id string `json:"id"`
-	// Name of the Account
-	Name string `json:"name"`
-	// Status of the account
-	Status string `json:"status"`
-	// Use [ISO 4217] currency code in which the account must be invoiced.
-	// For example: AED is the currency code for United Arab Emirates dirham.
-	//
-	// [ISO 4217]: https://en.wikipedia.org/wiki/ISO_4217
-	InvoiceCurrency string `json:"invoiceCurrency"`
-	// Aliases are tags that are associated with an account. Multiple aliases are allowed for a single account.
-	Aliases []AccountAlias `json:"aliases"`
-	// Account Settings
-	Settings []Setting `json:"settings"`
-}
-
-type AccountAlias struct {
-	Alias  string `json:"alias"`
-	Status string `json:"status"`
 }
 
 // TODO: Should we get a pointer to customer struct as input parameter? Instead of customer itself

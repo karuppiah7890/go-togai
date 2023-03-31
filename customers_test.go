@@ -136,21 +136,7 @@ func dummyCustomerWithAccount(randomNumber int) togai.CustomerWithAccount {
 			},
 		},
 		BillingAddress: customer.BillingAddress,
-		Account: togai.Account{
-			Id:              fmt.Sprintf("test-account-%d", randomNumber),
-			Name:            fmt.Sprintf("Test Account %d", randomNumber),
-			InvoiceCurrency: "USD",
-			Aliases:         []string{fmt.Sprintf("test-account-%d", randomNumber)},
-			Settings: []togai.Setting{
-				{
-					Id:        fmt.Sprintf("dummy-account-setting-%d", randomNumber),
-					Name:      fmt.Sprintf("Dummy Account Setting %d", randomNumber),
-					Namespace: togai.UserNamespace,
-					Value:     fmt.Sprintf("something %d", randomNumber),
-					DataType:  togai.StringSettingDataType,
-				},
-			},
-		},
+		Account:        dummyAccount(randomNumber),
 	}
 }
 
