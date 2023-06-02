@@ -17,7 +17,7 @@ type Account struct {
 	// For example: AED is the currency code for United Arab Emirates dirham.
 	//
 	// [ISO 4217]: https://en.wikipedia.org/wiki/ISO_4217
-	InvoiceCurrency string `json:"invoiceCurrency"`
+	InvoiceCurrency string `json:"invoiceCurrency,omitempty"`
 	// Aliases are tags that are associated with an account. Multiple aliases are allowed for a single account.
 	Aliases []string `json:"aliases"`
 	// Account Settings
