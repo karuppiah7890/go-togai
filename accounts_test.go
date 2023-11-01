@@ -17,26 +17,45 @@ func TestAccounts(t *testing.T) {
 		t.Fatalf("expected no error while creating togai client but an error occurred: %v", err)
 	}
 	t.Run("create account", func(t *testing.T) {
-		t.Run("create customer", func(t *testing.T) {
-			randomNumber := rand.Int()
-			customer := dummyCustomerWithAccount(randomNumber)
-			// TODO: Check if the output response fields and input request fields match, and that response also has
-			// some expected values like status as ACTIVE for account and account alias
-			_, err := c.CreateCustomer(customer)
-			if err != nil {
-				t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
-			}
+		randomNumber := rand.Int()
+		customer := dummyCustomerWithAccount(randomNumber)
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		_, err := c.CreateCustomer(customer)
+		if err != nil {
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
+		}
 
-			anotherRandomNumber := rand.Int()
-			account := dummyAccount(anotherRandomNumber)
-			// TODO: Check if the output response fields and input request fields match, and that response also has
-			// some expected values like status as ACTIVE for account and account alias
-			_, err = c.CreateAccount(customer.Id, account)
-			if err != nil {
-				t.Fatalf("expected no error while creating account but an error occurred: %v", err)
-			}
-		})
+		anotherRandomNumber := rand.Int()
+		account := dummyAccount(anotherRandomNumber)
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		_, err = c.CreateAccount(customer.Id, account)
+		if err != nil {
+			t.Fatalf("expected no error while creating account but an error occurred: %v", err)
+		}
 	})
+
+	t.Run("delete account", func(t *testing.T) {
+		randomNumber := rand.Int()
+		customer := dummyCustomerWithAccount(randomNumber)
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		_, err := c.CreateCustomer(customer)
+		if err != nil {
+			t.Fatalf("expected no error while creating customer but an error occurred: %v", err)
+		}
+
+		anotherRandomNumber := rand.Int()
+		account := dummyAccount(anotherRandomNumber)
+		// TODO: Check if the output response fields and input request fields match, and that response also has
+		// some expected values like status as ACTIVE for account and account alias
+		_, err = c.CreateAccount(customer.Id, account)
+		if err != nil {
+			t.Fatalf("expected no error while creating account but an error occurred: %v", err)
+		}
+	})
+
 }
 
 func dummyAccount(randomNumber int) togai.Account {
